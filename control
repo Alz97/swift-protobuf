@@ -1,6 +1,6 @@
 Package: org.swift.protobuf.swiftprotobuf
 Name: SwiftProtobuf
-Version: 1.29.0
+Version: 1.35.1
 Architecture: iphoneos-arm
 Description: Plugin and runtime library for using protobuf with Swift
 Maintainer: eevee
