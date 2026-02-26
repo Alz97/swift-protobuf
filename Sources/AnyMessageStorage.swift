@@ -46,10 +46,13 @@ private func emitVerboseTextForm(visitor: inout TextFormatEncodingVisitor, messa
 private func asJSONObject(body: [UInt8]) -> Data {
     let asciiOpenCurlyBracket = UInt8(ascii: "{")
     let asciiCloseCurlyBracket = UInt8(ascii: "}")
-    var result = [asciiOpenCurlyBracket]
+
+    var result = Data()
+    result.reserveCapacity(body.count + 2)
+    result.append(asciiOpenCurlyBracket)
     result.append(contentsOf: body)
     result.append(asciiCloseCurlyBracket)
-    return Data(result)
+    return result
 }
 
 private func unpack(
@@ -101,7 +104,7 @@ internal class AnyMessageStorage {
         get {
             switch state {
             case .binary(let value):
-                return Data(value)
+                return value
             case .message(let message):
                 do {
                     return try message.serializedBytes(partial: true)
@@ -145,15 +148,11 @@ internal class AnyMessageStorage {
     }
     var state: InternalState = .binary(Data())
 
-    #if swift(>=5.10)
     // This property is used as the initial default value for new instances of the type.
     // The type itself is protecting the reference to its storage via CoW semantics.
     // This will force a copy to be made of this reference when the first mutation occurs;
     // hence, it is safe to mark this as `nonisolated(unsafe)`.
     static nonisolated(unsafe) let defaultInstance = AnyMessageStorage()
-    #else
-    static let defaultInstance = AnyMessageStorage()
-    #endif
 
     private init() {}
 
