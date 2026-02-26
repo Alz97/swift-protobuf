@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: macos-14
     env:
-      VERSION: 1.29.0
+      VERSION: 1.35.1
       THEOS: ${{ github.workspace }}/theos
     steps:
     - uses: actions/checkout@v4
